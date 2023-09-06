@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  name           String
+  password       String
+  isActivated    Boolean   @default(false)
+  activationLink String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  GrowLog        GrowLog[]
+  Token          Token[]
+}
+
+model Token {
+  id           Int    @id @default(autoincrement())
+  refreshToken String
+  user         User   @relation(fields: [userId], references: [id])
+  userId       Int
+}
+
+model Strain {
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  type         String
+  description  String
+  feminization String
+  GrowLog      GrowLog[]
+}
+
+model GrowLog {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  strain      Strain     @relation(fields: [strainId], references: [id])
+  strainId    Int
+  owner       User       @relation(fields: [ownerId], references: [id])
+  ownerId     Int
+  isPublic    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  finshedAt   DateTime
+  LogEntry    LogEntry[]
+}
+
+model LogEntry {
+  id        Int      @id @default(autoincrement())
+  text      String
+  photo     String?
+  createdAt DateTime @default(now())
+  growLog   GrowLog  @relation(fields: [growLogId], references: [id])
+  growLogId Int
+}
+

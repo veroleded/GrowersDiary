@@ -1,16 +1,36 @@
 import jwt, { Secret } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 
-import { Model } from '../dtos/user-dto';
+import UserDto from '../dtos/user-dto';
 
 const prisma = new PrismaClient();
 
+// добавить сохранение на нескольких устройствах
+
 class TokenService {
-  generationTokens(payload: Model) {
+  generationTokens(payload: UserDto) {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET as Secret, { expiresIn: '30m' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as Secret, { expiresIn: '30d' });
 
     return { accessToken, refreshToken };
+  }
+
+  validateAccessToken(token: string) {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string);
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  validateRefreshToken(token: string) {
+    try {
+      const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET as string);
+      return userData;
+    } catch (e) {
+      return null;
+    }
   }
 
   async saveRefreshToken(userId: number, refreshToken: string) {
@@ -34,6 +54,20 @@ class TokenService {
         userId,
         refreshToken,
       },
+    });
+
+    return tokenData;
+  }
+
+  async removeToken(refreshToken: string) {
+    await prisma.token.delete({
+      where: { refreshToken },
+    });
+  }
+
+  async findToken(refreshToken: string) {
+    const tokenData = await prisma.token.findUnique({
+      where: { refreshToken },
     });
 
     return tokenData;

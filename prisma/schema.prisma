@@ -25,7 +25,7 @@ model User {
 
 model Token {
   id           Int    @id @default(autoincrement())
-  refreshToken String
+  refreshToken String @unique
   user         User   @relation(fields: [userId], references: [id])
   userId       Int
 }
@@ -33,9 +33,9 @@ model Token {
 model Strain {
   id           Int       @id @default(autoincrement())
   name         String    @unique
-  type         String
+  type         Boolean
   description  String
-  feminization String
+  feminization Boolean
   GrowLog      GrowLog[]
 }
 
@@ -62,4 +62,5 @@ model LogEntry {
   growLog   GrowLog  @relation(fields: [growLogId], references: [id])
   growLogId Int
 }
+
 

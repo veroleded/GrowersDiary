@@ -1,21 +1,23 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
-import router from './router';
+import routers from './router';
+import errorMiddleware from './middlewares/error-middleware';
 
 dotenv.config();
 
 const PORT = process.env.PORT ?? 3000;
 const app = express();
-const prisma = new PrismaClient();
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
-app.use('/api', router);
+app.use('/apiv1/auth', routers.authRouter);
+app.use('/apiv1/strain', routers.strainRouter)
+
+app.use(errorMiddleware);
 
 const start = async () => {
   try {

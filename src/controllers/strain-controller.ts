@@ -13,12 +13,42 @@ class StrainController {
     }
   }
 
-  async add(req: Request, res: Response, next: NextFunction) {
+  async addOne(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, description, type, feminization } = req.body;
-      const strainData = await strainService.add({ name, description, type, feminization });
+      const strainData = await strainService.addOne({ ...req.body });
+      
       return res.json(strainData);
-    } catch(e) {
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const strainData = await strainService.getOne(Number(id));
+      res.json(strainData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const strainData = await strainService.updateOne({ ...req.body }, Number(id));
+      res.json(strainData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async deleteOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      await strainService.deleteOne(Number(id));
+      res.send();
+    } catch (e) {
       next(e);
     }
   }

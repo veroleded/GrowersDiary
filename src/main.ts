@@ -3,7 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
-import routers from './router';
+import routers from './routers';
 import errorMiddleware from './middlewares/error-middleware';
 
 dotenv.config();
@@ -15,7 +15,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use('/apiv1/auth', routers.authRouter);
-app.use('/apiv1/strain', routers.strainRouter)
+app.use('/apiv1/strains', routers.strainRouter);
+app.use('/apiv1/growlogs', routers.growLogRouter);
 
 app.use(errorMiddleware);
 

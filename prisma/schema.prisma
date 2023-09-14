@@ -34,7 +34,7 @@ model Strain {
   id           Int       @id @default(autoincrement())
   name         String    @unique
   type         Boolean
-  description  String
+  description  String?
   feminization Boolean
   GrowLog      GrowLog[]
 }
@@ -42,7 +42,7 @@ model Strain {
 model GrowLog {
   id          Int        @id @default(autoincrement())
   name        String
-  description String
+  description String?
   strain      Strain     @relation(fields: [strainId], references: [id])
   strainId    Int
   owner       User       @relation(fields: [ownerId], references: [id])
@@ -50,7 +50,7 @@ model GrowLog {
   isPublic    Boolean    @default(true)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  finshedAt   DateTime
+  finshedAt   DateTime?
   LogEntry    LogEntry[]
 }
 

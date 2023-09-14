@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 
 import AuthError from '../exceptions/api-errors';
 import tokenService from '../service/token-service';
-import { RequestUser } from './interfaces/additional-request';
+import { RequestUser } from '../interfaces/additional-request';
 import UserDto from '../dtos/user-dto';
 
 const authMiddleware = (req: RequestUser, res: Response, next: NextFunction) => {

@@ -1,6 +1,6 @@
 import { LogEntry } from "@prisma/client";
 
-export default class logEntryDto {
+export default class LogEntryDto {
   id;
   createdAt;
   text;

@@ -5,7 +5,7 @@ import ApiError from '../exceptions/api-errors';
 
 const prisma = new PrismaClient();
 
-class GrowLog {
+class GrowLogService {
   async getAllOwnerGrowLogs(ownerId: number) {
     const growLogs = await prisma.growLog.findMany({
       where: { ownerId },
@@ -80,10 +80,15 @@ class GrowLog {
       throw ApiError.BadRequest('No access rights');
     }
 
-    await prisma.growLog.delete({
+    const deleteGrowLog = prisma.growLog.delete({
       where: { id },
     });
+    const deleteLogEntries = prisma.logEntry.deleteMany({
+      where: {growLogId: id }
+    });
+
+    await prisma.$transaction([deleteLogEntries, deleteGrowLog]);
   }
 }
 
-export default new GrowLog();
+export default new GrowLogService();

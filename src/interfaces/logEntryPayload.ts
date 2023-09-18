@@ -1,8 +1,6 @@
 export interface PostLogEntryPayload {
   name: string;
   text: string;
-  createdAt: Date;
-  photo: string;
   growLogId: number;
 }
 

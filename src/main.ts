@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import multer from 'multer';
 
 import routers from './routers';
 import errorMiddleware from './middlewares/error-middleware';
@@ -14,9 +15,12 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(multer().any());
+
 app.use('/apiv1/auth', routers.authRouter);
 app.use('/apiv1/strains', routers.strainRouter);
 app.use('/apiv1/growlogs', routers.growLogRouter);
+app.use('/apiv1/logentries', routers.logEntryRouter);
 
 app.use(errorMiddleware);
 

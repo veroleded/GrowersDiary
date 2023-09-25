@@ -6,7 +6,7 @@ import { User } from '@prisma/client';
 import mailService from './mail-service';
 import tokenService from './token-service';
 import UserDto from '../dtos/user-dto';
-import AuthError from '../exceptions/api-errors';
+import ApiError from '../exceptions/api-errors';
 
 const prisma = new PrismaClient();
 
@@ -19,7 +19,7 @@ class UserService {
     });
 
     if (candidate) {
-      throw AuthError.BadRequest('A user with this email address already exists');
+      throw ApiError.BadRequest('A user with this email address already exists', );
     }
 
     const hashPassword = await bcrypt.hash(password, 3);
@@ -29,7 +29,7 @@ class UserService {
         name,
         email,
         password: hashPassword,
-        activationLink: `${process.env.API_URL}/api/activate/${activationLink}`,
+        activationLink: `${process.env.API_URL}/apiv1/auth/activate/${activationLink}`,
       },
     });
 
@@ -44,11 +44,11 @@ class UserService {
 
   async activate(activationLink: string) {
     const user = await prisma.user.findFirst({
-      where: { activationLink: `${process.env.API_URL}/api/activate/${activationLink}` },
+      where: { activationLink: `${process.env.API_URL}/apiv1/auth/activate/${activationLink}` },
     });
 
     if (!user) {
-      throw AuthError.BadRequest('Invalid activation link');
+      throw ApiError.BadRequest('Invalid activation link');
     }
 
     // Добавить обработку если активация уже сделана
@@ -67,13 +67,13 @@ class UserService {
     });
 
     if (!user) {
-      throw AuthError.BadRequest('User not registered');
+      throw ApiError.BadRequest('Invalid login or password');
     }
 
     const isPassEquals = await bcrypt.compare(password, user.password);
 
     if (!isPassEquals) {
-      throw AuthError.BadRequest('Incorrect password');
+      throw ApiError.BadRequest('Invalid login or password');
     }
 
     const userDto = new UserDto(user);
@@ -87,16 +87,16 @@ class UserService {
     await tokenService.removeToken(refreshToken);
   }
 
-  async refresh(refreshToken: unknown) {
+  async refresh(refreshToken: string) {
     if (!refreshToken) {
-      throw AuthError.UnautharizedError();
+      throw ApiError.UnautharizedError();
     }
 
     const userData = tokenService.validateRefreshToken(refreshToken as string);
     const tokenFromDb = tokenService.findToken(refreshToken as string);
 
     if (!userData || !tokenFromDb) {
-      throw AuthError.UnautharizedError();
+      throw ApiError.UnautharizedError();
     }
 
     const user = await prisma.user.findUnique({

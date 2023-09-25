@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 
 import AuthError from '../exceptions/api-errors';
-import tokenService from '../service/token-service';
+import tokenService from '../services/token-service';
 import { RequestUser } from '../interfaces/additional-request';
 import UserDto from '../dtos/user-dto';
 

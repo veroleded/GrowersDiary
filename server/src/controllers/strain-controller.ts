@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import strainService from '../service/strain-service';
+import strainService from '../services/strain-service';
 
 class StrainController {
   async getAll(req: Request, res: Response, next: NextFunction) {

@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 
 import { RequestUser } from '../interfaces/additional-request';
-import logEntryService from '../service/logEntry-service';
+import logEntryService from '../services/logEntry-service';
 import UserDto from '../dtos/user-dto';
 
 class LogEntryController {

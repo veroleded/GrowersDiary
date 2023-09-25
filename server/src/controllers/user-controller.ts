@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import userService from '../service/user-service';
+import userService from '../services/user-service';
 import { validationResult } from 'express-validator';
 import AuthError from '../exceptions/api-errors';
 
@@ -18,7 +18,6 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 1000, httpOnly: true }); // 30 day
       return res.json(userData);
     } catch (err) {
-      console.log(123);
       next(err);
     }
   }
@@ -55,7 +54,7 @@ class UserController {
       const { refreshToken } = req.cookies;
       const userData = await userService.refresh(refreshToken);
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 1000, httpOnly: true });
-      return res.status(200).send();
+      return res.status(200).json(userData);
 
     } catch (err) {
       next(err);

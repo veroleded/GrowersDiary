@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 
 import { RequestUser } from '../interfaces/additional-request';
-import growLogService from '../service/growLog-service';
+import growLogService from '../services/growLog-service';
 import UserDto from '../dtos/user-dto';
 
 class GrowLogController {

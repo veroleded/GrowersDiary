@@ -25,7 +25,6 @@ export default class AuthStore {
   async login(email: string, password: string) {
     try {
       const response = await AuthService.login(email, password);
-      console.log(response);
       const token = response.data.accessToken;
       const user = response.data.user;
 
@@ -34,7 +33,7 @@ export default class AuthStore {
       this.setUser(user);
     } catch (e) {
       if (e instanceof AxiosError) {
-        console.log(e);
+        console.log(e.response?.data);
       } else {
         console.log(e);
       }
@@ -44,7 +43,6 @@ export default class AuthStore {
   async registration(email: string, name: string, password: string) {
     try {
       const response = await AuthService.registration(email, name, password);
-      console.log(response);
       const token = response.data.accessToken;
       const user = response.data.user;
 

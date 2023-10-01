@@ -1,7 +1,7 @@
 export interface PostStrainPayload {
   name: string;
   type: boolean;
-  description: string | null;
+  description?: string | null;
   feminization: boolean;
 }
 

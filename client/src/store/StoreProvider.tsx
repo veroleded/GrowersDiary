@@ -1,16 +1,19 @@
 import { ReactNode, createContext, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import RootStore from './RootStore';
+import AuthStore from './AuthStore';
+import StrainStore from './StrainStore';
 
 interface IStore {
-  store: RootStore;
+  authStore: AuthStore;
+  strainStore: StrainStore;
 }
 
-const store = new RootStore();
+const store = {
+  authStore: new AuthStore(),
+  strainStore: new StrainStore(),
+};
 
-const Context = createContext<IStore>({
-  store,
-});
+const Context = createContext<IStore>(store);
 
 type Props = {
   children: ReactNode;
@@ -24,6 +27,6 @@ export const useAppStore = () => {
 };
 
 export const AppStoreProvider = observer(({ children }: Props) => {
-  return <Context.Provider value={{ store }}>{children}</Context.Provider>;
+  return <Context.Provider value={store}>{children}</Context.Provider>;
 });
 

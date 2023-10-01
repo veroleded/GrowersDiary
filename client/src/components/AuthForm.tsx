@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -19,9 +19,15 @@ const validationSchema = Yup.object().shape({
 });
 
 const AuthForm: FC<Props> = observer(({ formType }) => {
-  const { AuthStore } = useAppStore().store;
+  const { authStore } = useAppStore();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (authStore.isAuth) {
+      navigate('/main');
+    }
+  }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -33,16 +39,16 @@ const AuthForm: FC<Props> = observer(({ formType }) => {
     validateOnChange: false,
     onSubmit: async ({ email, password, name }) => {
       if (formType === 'login') {
-        await AuthStore.login(email, password);
-        if (AuthStore.isAuth) {
+        await authStore.login(email, password);
+        if (authStore.isAuth) {
           setError(null);
           navigate('/main');
         } else {
           setError('Неверный логин или пароль');
         }
       } else {
-        await AuthStore.registration(email, name, password);
-        if (AuthStore.isAuth) {
+        await authStore.registration(email, name, password);
+        if (authStore.isAuth) {
           setError(null);
           navigate('/profile');
         } else {

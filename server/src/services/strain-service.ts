@@ -13,6 +13,12 @@ class StrainService {
   }
 
   async addOne(payload: PostStrainPayload) {
+    const candidate = await prisma.strain.findUnique({
+      where: {name: payload.name}
+    });
+    if (candidate) {
+      throw ApiError.BadRequest('Strain is already exist');
+    }
     const strainData = await prisma.strain.create({
       data: { ...payload },
     });

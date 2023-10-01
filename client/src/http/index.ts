@@ -31,6 +31,7 @@ $api.interceptors.response.use(
         console.log(e);
       }
     }
+    throw error;
   },
 );
 

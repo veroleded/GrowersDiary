@@ -1,16 +1,14 @@
 import { makeAutoObservable } from 'mobx';
-import { IStrain } from '../models/IStrain';
+import { IStrainResponse } from '../models/response/IStrainResponse';
 import StrainService from '../services/StrainService';
 import { AxiosError } from 'axios';
+import { IStrainRequest } from '../models/IStrainRequest';
 
 type errorName = 'post' | 'getMany' | 'getOne' | 'update' | 'delete';
 
-interface Strains  {
-  [id: number]: IStrain;
-}
 
 export default class StrainStore {
-  strains = {} as Strains;
+  strains =  [] as IStrainResponse[];
   errors = {
     post: false,
     getMany: false,
@@ -29,12 +27,16 @@ export default class StrainStore {
     this.isLoading = bool;
   }
 
-  setStrains(strains: IStrain[]) {
-    strains.forEach((strain) => this.strains[strain.id as number] = strain)
+  setStrains(strains: IStrainResponse[]) {
+    this.strains = strains;
   }
 
-  setStrain(strain: IStrain) {
-    this.strains[strain.id as number] = strain;
+  setStrain(strain: IStrainResponse) {
+    this.strains.push(strain);
+  }
+
+  deleteStrain(strainId: number) {
+    this.strains.filter((strain) => strain.id !== strainId);
   }
 
   setError(errorName: errorName) {
@@ -45,7 +47,7 @@ export default class StrainStore {
     this.errors[errorName] = false;
   }
 
-  async postStrain(strain: IStrain) {
+  async postStrain(strain: IStrainRequest) {
     try {
       this.setLoading(true);
       const response = await StrainService.addOne(strain);
@@ -70,6 +72,15 @@ export default class StrainStore {
       console.log(e);
     } finally {
       this.setLoading(false);
+    }
+  }
+
+  async delStrain(id: number) {
+    try {
+      await StrainService.deleteOne(id);
+      this.getStrains();
+    } catch(e) {
+      console.log(e);
     }
   }
 }

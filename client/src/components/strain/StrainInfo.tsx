@@ -1,11 +1,14 @@
 import React from 'react';
-import { IStrain } from '../models/IStrain';
+import { IStrainResponse } from '../../models/response/IStrainResponse';
+import { useAppStore } from '../../store/StoreProvider';
 
 type Props = {
-  strain: IStrain;
+  strain: IStrainResponse;
 };
 
 const StrainInfo = ({ strain }: Props) => {
+  const { strainStore } = useAppStore();
+
   console.log(strain.type);
   return (
     <div>
@@ -17,6 +20,7 @@ const StrainInfo = ({ strain }: Props) => {
           {', '}
           <span>{strain.feminization ? 'Феменизированный' : 'Регулярный'}</span>
         </p>
+        <button onClick={async () => await strainStore.delStrain(strain.id)}>Удалить</button>
       </div>
     </div>
   );

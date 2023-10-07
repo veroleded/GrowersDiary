@@ -1,13 +1,18 @@
 import { AxiosResponse } from 'axios';
 import $api from '../http';
-import { IStrain } from '../models/IStrain';
+import { IStrainResponse } from '../models/response/IStrainResponse';
+import { IStrainRequest } from '../models/IStrainRequest';
 
 export default class StrainService {
-  static async getAll(): Promise<AxiosResponse<IStrain[]>> {
-    return $api.get<IStrain[]>('/strains');
+  static async getAll(): Promise<AxiosResponse<IStrainResponse[]>> {
+    return $api.get<IStrainResponse[]>('/strains');
   }
 
-  static async addOne(strain: IStrain): Promise<AxiosResponse<IStrain>> {
-    return $api.post<IStrain>('/strains', strain);
+  static async addOne(strain: IStrainRequest): Promise<AxiosResponse<IStrainResponse>> {
+    return $api.post<IStrainResponse>('/strains', strain);
+  }
+
+  static async deleteOne(strainId: number): Promise<AxiosResponse<void>> {
+    return $api.delete<void>(`/strains/${strainId}`);
   }
 }

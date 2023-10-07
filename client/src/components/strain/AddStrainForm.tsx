@@ -1,7 +1,6 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAppStore } from '../store/StoreProvider';
-import { IStrain } from '../models/IStrain';
+import { useAppStore } from '../../store/StoreProvider';
 import { useEffect } from 'react';
 
 const validationSchema = Yup.object().shape({
@@ -28,13 +27,13 @@ const AddStrainForm = () => {
     validationSchema,
     validateOnChange: false,
     onSubmit: async ({ name, description, type, feminization }) => {
-      const validValue: IStrain = {
+      console.log({ name, description, type, feminization })
+      const validValue = {
         name: name,
         description: description === '' ? null : description,
-        type: type === 1 ? true : false,
-        feminization: feminization === 1 ? true : false,
+        type: type === '1' ? true : false,
+        feminization: feminization === '1' ? true : false,
       };
-      console.log(validValue);
       await strainStore.postStrain(validValue);
     },
   });

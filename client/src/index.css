@@ -147,7 +147,7 @@ body {
   max-width: 100%;
 }
 
-.btn-slide {
+.btn-auth {
   border: 2px solid rgb(123, 156, 40);
   border-radius: 5px;
 
@@ -163,7 +163,7 @@ body {
   transition: all 0.3s linear;
 }
 
-.btn-slide:hover {
+.btn-auth:hover {
   color: rgb(123, 156, 40);
 }
 
@@ -194,10 +194,17 @@ body {
 }
 
 .auth-form-input input {
+  padding: 5px;
   border: 1px solid white;
   border-radius: 5px;
   width: 100%;
   height: 50px;
+  font-size: 1.6em;
+  transition: all 0.3s linear;
+}
+
+.auth-form-input:focus input:focus {
+  border: 1px solid rgb(123, 156, 40);
 }
 
 .auth-form-input label {

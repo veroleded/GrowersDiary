@@ -20,12 +20,12 @@ const Auth = () => {
         <div className='form-container'>
           <div className='form-btn-group'>
             <button
-              className={classNames('btn-slide', { 'active-btn': authType === 'registration' })}
+              className={classNames('btn-auth', { 'active-btn': authType === 'registration' })}
               onClick={slideBtnHandler('registration')}>
               Регистрация
             </button>
             <button
-              className={classNames('btn-slide', { 'active-btn': authType === 'login' })}
+              className={classNames('btn-auth', { 'active-btn': authType === 'login' })}
               onClick={slideBtnHandler('login')}>
               Войти
             </button>
